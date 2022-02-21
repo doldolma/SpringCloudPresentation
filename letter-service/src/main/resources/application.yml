@@ -16,9 +16,9 @@ spring:
     generate-ddl: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:33100/testdb
+    url: jdbc:mariadb://doldolma.com:3311/testdb
     username: root
-    password: 123123
+    password: 12312311
 
 eureka:
   client:

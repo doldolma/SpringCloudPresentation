@@ -4,6 +4,6 @@ import com.doldolma.letterservice.repository.LetterEntity;
 import java.util.List;
 
 public interface LetterService {
-    List<LetterEntity> getLettersByUserId(String receivedUserId);
+    List<String> getLettersByUserId(String receivedUserId);
     void createLetter(LetterEntity letter);
 }

@@ -31,8 +31,8 @@ public class LetterController {
     }
 
     @GetMapping("/letters/{userId}")
-    public List<LetterEntity> getLetters(@PathVariable("userId") String userId){
-        List<LetterEntity> letters = letterService.getLettersByUserId(userId);
+    public List<String> getLetters(@PathVariable("userId") String userId){
+        List<String> letters = letterService.getLettersByUserId(userId);
         log.info("letters = " + letters.toString());
         return letters;
     }

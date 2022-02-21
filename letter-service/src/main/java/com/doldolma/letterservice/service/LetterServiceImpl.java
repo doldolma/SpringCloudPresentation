@@ -3,6 +3,8 @@ package com.doldolma.letterservice.service;
 import com.doldolma.letterservice.repository.LetterEntity;
 import com.doldolma.letterservice.repository.LetterRepository;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,10 @@ public class LetterServiceImpl implements LetterService{
     }
 
     @Override
-    public List<LetterEntity> getLettersByUserId(String userId) {
+    public List<String> getLettersByUserId(String userId) {
         List<LetterEntity> letters = letterRepository.findByUserId(Integer.parseInt(userId));
         log.info("service = "+ letters.toString());
-        return letters;
+        return letters.stream().map(letter -> { return letter.getContent(); }).collect(Collectors.toList());
     }
 
     @Override
