@@ -1,0 +1,43 @@
+server:
+  port: 7894
+
+spring:
+  application:
+    name: letter-service
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:33100/testdb
+    username: root
+    password: 123123
+
+eureka:
+  client:
+    register-with-eureka: false # ?????? ???.
+    fetch-registry: false
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+gateway:
+  ip: 127.0.0.1
+
+logging:
+  level:
+    com.doldolma.letterservice.client: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus

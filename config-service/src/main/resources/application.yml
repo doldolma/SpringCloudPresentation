@@ -1,0 +1,17 @@
+server:
+  port: 18888
+spring:
+  application:
+    name: config-service
+  kafka:
+    bootstrap-servers: ${kafka}:9092
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/doldolma/spring-cloud-config.git
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh
