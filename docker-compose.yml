@@ -125,8 +125,15 @@ services:
     networks:
       - spring-cloud-network
 
-  sidecar:
-    build: ./sidecar
+
+  user-service:
+    build: ./user-service
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - mariadb
+      - discovery-service
+      - apigateway-service
 
 
 

@@ -26,11 +26,9 @@
 
 	
 	<modules>
-         <module>apigateway-service</module>
-         <module>discovery-service</module>
-         <module>config-service</module>
-         <module>letter-service</module>
-		     <module>sidecar</module>
-<!--         <module>spring-cloud-sidecar</module>-->
-    </modules>	
+		 <module>apigateway-service</module>
+		 <module>discovery-service</module>
+		 <module>config-service</module>
+		 <module>letter-service</module>
+	</modules>
 </project>
