@@ -6,12 +6,11 @@
 		<groupId>com.doldolma</groupId>
 		<artifactId>SpringCloudPresentation</artifactId>
 		<version>1.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.doldolma</groupId>
 	<artifactId>config-service</artifactId>
 	<version>1.0</version>
-	<name>configSerer</name>
+	<name>config-service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>

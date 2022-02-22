@@ -3,19 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-
 	<groupId>com.doldolma</groupId>
 	<artifactId>SpringCloudPresentation</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>SpringCloudPresentation</name>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.3</version>
+	</parent>
 
 
 
@@ -28,9 +27,10 @@
 	
 	<modules>
          <module>apigateway-service</module>
-         <module>discover-service</module>
+         <module>discovery-service</module>
          <module>config-service</module>
          <module>letter-service</module>
+		     <module>sidecar</module>
 <!--         <module>spring-cloud-sidecar</module>-->
     </modules>	
 </project>

@@ -6,7 +6,6 @@
         <groupId>com.doldolma</groupId>
         <artifactId>SpringCloudPresentation</artifactId>
         <version>1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.doldolma</groupId>
     <artifactId>discovery-service</artifactId>

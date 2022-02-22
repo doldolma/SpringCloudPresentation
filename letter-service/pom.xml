@@ -7,7 +7,6 @@
     <groupId>com.doldolma</groupId>
     <artifactId>SpringCloudPresentation</artifactId>
     <version>1.0</version>
-    <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.doldolma</groupId>
   <artifactId>letter-service</artifactId>
@@ -86,6 +85,8 @@
       <groupId>org.mariadb.jdbc</groupId>
       <artifactId>mariadb-java-client</artifactId>
     </dependency>
+
+
 
   </dependencies>
   <dependencyManagement>

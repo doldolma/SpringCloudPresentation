@@ -1,4 +1,4 @@
 FROM openjdk:17-ea-11-slim
-VOLUME /tmp
-COPY target/config-service-1.0.jar ConfigServer.jar
-ENTRYPOINT ["java", "-jar", "ConfigServer.jar"]
+COPY target/config-service-1.0.jar app.jar
+EXPOSE 8888
+ENTRYPOINT ["java", "-jar", "app.jar"]
