@@ -34,7 +34,7 @@ CREATE TABLE `grews` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `nicknameEng` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `likesCount` int unsigned NOT NULL DEFAULT '0',
+  `lettersCount` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 4123
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     base-url: http://127.0.0.1:9411
     enabled: true
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 127.0.0.1:9092
   jpa:
     show-sql: true
     hibernate:
@@ -30,9 +30,3 @@ eureka:
 logging:
   level:
     com.doldolma.letterservice.client: INFO
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, beans, busrefresh, info, metrics, prometheus

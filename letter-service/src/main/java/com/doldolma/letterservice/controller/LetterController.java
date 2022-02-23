@@ -1,5 +1,6 @@
 package com.doldolma.letterservice.controller;
 
+import com.doldolma.letterservice.message.KafkaProducer;
 import com.doldolma.letterservice.repository.LetterEntity;
 import com.doldolma.letterservice.service.LetterService;
 import java.util.List;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LetterController {
     private final Environment env;
     private final LetterService letterService;
+    private final KafkaProducer kafkaProducer;
 
-    public LetterController(Environment env, LetterService letterService) {
+    public LetterController(Environment env, LetterService letterService, KafkaProducer kafkaProducer) {
         this.env = env;
         this.letterService = letterService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @GetMapping("/welcome")
@@ -39,8 +42,9 @@ public class LetterController {
 
     @PostMapping("/letters")
     public String createLetter(@RequestBody LetterEntity letter){
-        log.info(letter.toString());
+        log.info(letter.toString() + "doldolma");
         letterService.createLetter(letter);
+        kafkaProducer.sendLetter(letter);
         return "success";
     }
 }

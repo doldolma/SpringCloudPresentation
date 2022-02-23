@@ -9,7 +9,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/doldolma/spring-cloud-config.git
+          uri: https://github.com/doldolma/SpringCloudConfig.git
 management:
   endpoints:
     web:

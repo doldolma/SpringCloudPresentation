@@ -76,7 +76,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
       SPRING_CLOUD_CONFIG_URI: http://config-service:8888
     networks:
@@ -90,8 +91,8 @@ services:
     ports:
       - "8888:8888"
     environment:
-      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
-      spring.cloud.config.server.get.uri: https://github.com/doldolma/SpringCloudConfig.git
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/doldolma/SpringCloudConfig.git
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
     networks:
       - spring-cloud-network
@@ -102,7 +103,7 @@ services:
     build: ./letter-service
     environment:
       SPRING_ZIPKIN_BASEURL: http://zipkin:9411
-      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
       SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/testdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 123123
@@ -131,9 +132,16 @@ services:
     networks:
       - spring-cloud-network
     depends_on:
-      - mariadb
+      - mysql
       - discovery-service
       - apigateway-service
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: 123123
+      KAFKA_HOST: kafka:9092
+      APIGATEWAY: https://grew.doldolma.com
 
 
 
