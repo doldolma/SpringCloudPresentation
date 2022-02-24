@@ -19,15 +19,16 @@ public class KafkaProducer {
     }
 
     public void sendLetter(LetterEntity letter){
-//        ObjectMapper mapper = new ObjectMapper();
-//        String jsonInString = "";
-//        try{
-//            jsonInString = mapper.writeValueAsString(letter);
-//        }catch (JsonProcessingException ex){
-//            ex.printStackTrace();
-//        }
+        log.info("doldolma : ");
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+        try{
+            jsonInString = mapper.writeValueAsString(letter);
+        }catch (JsonProcessingException ex){
+            ex.printStackTrace();
+        }
 
-        kafkaTemplate.send("newLetter", letter);
-        log.info("Kafka Producer send data from the Order microservice : " + letter.toString());
+        kafkaTemplate.send("newLetter", jsonInString);
+        log.info("Kafka Producer send data from the letter-microservice : " + jsonInString);
     }
 }

@@ -30,19 +30,19 @@ scrape_configs:
 
   - job_name: "user-service"
     scrape_interval: 15s
-    metrics_path: '/user-service/actuator/prometheus'
+    metrics_path: '/user-service/metrics'
     static_configs:
-    - targets: ['user-service:8000']
+    - targets: ['user-service']
   
-  - job_name: "order-service"
+  - job_name: "letter-service"
     scrape_interval: 15s
-    metrics_path: '/order-service/actuator/prometheus'
+    metrics_path: '/letter-service/actuator/prometheus'
     static_configs:
-    - targets: ['order-service:8000']
+    - targets: ['letter-service']
   
   - job_name: "apigateway-service"
     scrape_interval: 15s
     metrics_path: '/actuator/prometheus'
     static_configs:
-    - targets: ['apigateway:8000']
+    - targets: ['apigateway']
 

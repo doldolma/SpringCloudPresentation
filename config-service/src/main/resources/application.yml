@@ -4,12 +4,20 @@ spring:
   application:
     name: config-service
   kafka:
-    bootstrap-servers: ${kafka}:9092
+    bootstrap-servers: 127.0.0.1:9092
   cloud:
     config:
       server:
         git:
           uri: https://github.com/doldolma/SpringCloudConfig.git
+    bus:
+      enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
 management:
   endpoints:
     web:

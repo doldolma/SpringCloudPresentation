@@ -8,7 +8,9 @@ spring:
     base-url: http://127.0.0.1:9411
     enabled: true
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   jpa:
     show-sql: true
     hibernate:
