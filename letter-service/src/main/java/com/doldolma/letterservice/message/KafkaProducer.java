@@ -19,7 +19,6 @@ public class KafkaProducer {
     }
 
     public void sendLetter(LetterEntity letter){
-        log.info("doldolma : ");
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";
         try{

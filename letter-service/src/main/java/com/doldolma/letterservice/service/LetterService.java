@@ -6,4 +6,5 @@ import java.util.List;
 public interface LetterService {
     List<String> getLettersByUserId(String receivedUserId);
     void createLetter(LetterEntity letter);
+    Long countLetter(String userId);
 }

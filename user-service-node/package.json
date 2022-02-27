@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon ./index.js",
+    "seed": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "cors": "^2.8.5",
+    "dotenv": "^14.2.0",
+    "eureka-js-client": "^4.5.0",
+    "express": "^4.17.2",
+    "kafkajs": "^1.16.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15",
+    "sequelize": "^6.16.1",
+    "winston": "^3.6.0",
+    "zipkin": "^0.22.0",
+    "zipkin-context-cls": "^0.22.0",
+    "zipkin-encoder-thrift": "^0.22.0",
+    "zipkin-instrumentation-axios": "^0.1.0",
+    "zipkin-instrumentation-express": "^0.22.0",
+    "zipkin-instrumentation-fetch": "^0.22.0",
+    "zipkin-transport-http": "^0.22.0"
+  }
+}

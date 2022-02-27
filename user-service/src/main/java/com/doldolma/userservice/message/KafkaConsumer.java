@@ -1,6 +1,8 @@
 package com.doldolma.userservice.message;
 
 
+import com.doldolma.userservice.client.LetterServiceClient;
+import com.doldolma.userservice.jpa.UserEntity;
 import com.doldolma.userservice.jpa.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,8 +17,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaConsumer {
     UserRepository repository;
+    LetterServiceClient letterServiceClient;
 
-    public KafkaConsumer(UserRepository repository) {
+    public KafkaConsumer(UserRepository repository, LetterServiceClient letterServiceClient) {
+        this.letterServiceClient = letterServiceClient;
         this.repository = repository;
     }
 
@@ -31,11 +35,13 @@ public class KafkaConsumer {
         } catch (JsonProcessingException ex){
             ex.printStackTrace();
         }
-//
-//        CatalogEntity entity = repository.findByProductId((String) map.get("productId"));
-//        if(entity != null) {
-//            entity.setStock(entity.getStock() - (Integer)map.get("qty"));
-//            repository.save(entity);
-//        }
+        String userId = map.get("userId").toString();
+        UserEntity user = repository.findById(Integer.parseInt(userId));
+
+        Long lettersCount = letterServiceClient.getLettersCount(userId);
+        log.info("letter count : " + lettersCount.toString());
+
+        user.setLettersCount(lettersCount.intValue());
+        repository.save(user);
     }
 }

@@ -34,4 +34,9 @@ public class LetterServiceImpl implements LetterService{
         letterRepository.save(letter);
         kafkaProducer.sendLetter(letter);
     }
+
+    @Override
+    public Long countLetter(String userId) {
+        return letterRepository.countByUserId(Integer.parseInt(userId));
+    }
 }
