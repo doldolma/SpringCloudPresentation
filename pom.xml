@@ -30,5 +30,6 @@
 		 <module>discovery-service</module>
 		 <module>config-service</module>
 		 <module>letter-service</module>
+		<module>user-service</module>
 	</modules>
 </project>

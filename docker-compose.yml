@@ -1,4 +1,4 @@
-version: '1'
+version: "2"
 services:
   mysql:
     image: mysql
@@ -11,7 +11,12 @@ services:
       - ./mysql/grews.sql:/data/application/grews.sql
     networks:
       - spring-cloud-network
-    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-hlocalhost", "-uroot", "-p123123"]
+#      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
 
   mariadb:
     image: mariadb
@@ -22,7 +27,13 @@ services:
       MARIADB_DATABASE: testdb
     networks:
       - spring-cloud-network
-    restart: always
+#    restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-hlocalhost", "-uroot", "-p123123" ]
+#      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
 
   zipkin:
     image: openzipkin/zipkin
@@ -30,14 +41,7 @@ services:
       - "9411:9411"
     networks:
       - spring-cloud-network
-    restart: always
-
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    networks:
-      - spring-cloud-network
+#    restart: always
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -85,9 +89,12 @@ services:
     networks:
       - spring-cloud-network
     depends_on:
-      - discovery-service
-      - kafka
-      - mysql
+      config-service:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+      kafka:
+        condition: service_started
 
   config-service:
     build: ./config-service
@@ -99,6 +106,14 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
     networks:
       - spring-cloud-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/application/default" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    depends_on:
+      - kafka
 
   letter-service:
     build: ./letter-service
@@ -113,12 +128,10 @@ services:
     networks:
       - spring-cloud-network
     depends_on:
-      - mariadb
-      - mysql
-      - discovery-service
-      - config-service
-      - apigateway-service
-      - kafka
+      mariadb:
+        condition: service_healthy
+      apigateway-service:
+        condition: service_started
 
   discovery-service:
     build: ./discovery-service
@@ -129,28 +142,66 @@ services:
 
   user-service:
     build: ./user-service
+    environment:
+      SPRING_ZIPKIN_BASE-URL: http://zipkin:9411
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jest_presentation
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123123
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
+      SPRING_CLOUD_CONFIG_URI: http://config-service:8888
     networks:
       - spring-cloud-network
     depends_on:
-      - mysql
-      - discovery-service
-      - apigateway-service
-      - letter-service
-    environment:
-      NODE_ENV: production
-      DATABASE_HOST: mysql
-      DATABASE_PORT: 3306
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD: 123123
-      KAFKA_HOST: kafka:9092
-      APIGATEWAY: https://grew.doldolma.com
+      mysql:
+        condition: service_healthy
+      apigateway-service:
+        condition: service_started
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - user-service
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - prometheus
 
 networks:
   spring-cloud-network:
     driver: bridge
-  kafka-network:
-    driver: host
 #    gateway: 10.1.0.1
 #    subnet: 10.1.0.0/16
 ##
 
+
+
+
+#  user-service-node:
+#    build: ./user-service
+#    networks:
+#      - spring-cloud-network
+#    depends_on:
+#      - mysql
+#      - discovery-service
+#      - apigateway-service
+#      - letter-service
+#    environment:
+#      NODE_ENV: production
+#      DATABASE_HOST: mysql
+#      DATABASE_PORT: 3306
+#      DATABASE_USERNAME: root
+#      DATABASE_PASSWORD: 123123
+#      KAFKA_HOST: kafka:9092
+#      APIGATEWAY: https://grew.doldolma.com

@@ -42,9 +42,7 @@ public class LetterController {
 
     @PostMapping("/letters")
     public String createLetter(@RequestBody LetterEntity letter){
-        log.info(letter.toString() + "doldolma");
         letterService.createLetter(letter);
-        kafkaProducer.sendLetter(letter);
         return "success";
     }
 }

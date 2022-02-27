@@ -6,6 +6,9 @@ spring:
     name: apigateway-service
   kafka:
     bootstrap-servers: 127.0.0.1:9092
+  sleuth:
+    sampler:
+      probability: 1.0
   cloud:
     gateway:
       default-filters:
@@ -16,7 +19,7 @@ spring:
             postLogger: true
       routes:
         - id: user-service
-          uri: http://user-service:4000
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
           filters:
@@ -28,15 +31,11 @@ spring:
           filters:
             - RewritePath=/letter-service/(?<segment>.*), /$\{segment}
         - id: config-service
-          uri: http://config-service:8888
+          uri: lb://CONFIG-SERVICE
           predicates:
             - Path=/config-service/**
           filters:
             - RewritePath=/config-service/(?<segment>.*), /$\{segment}
-        - id: user-service2
-          uri: http://user-service:4000
-          predicates:
-            - Path=/**
 
 eureka:
   client:
@@ -44,3 +43,14 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
+
+logging:
+  level:
+    org.springframework: TRACE
