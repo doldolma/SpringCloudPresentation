@@ -28,21 +28,39 @@ scrape_configs:
     static_configs:
       - targets: ["prometheus:9090"]
 
-  - job_name: "user-service"
-    scrape_interval: 15s
-    metrics_path: '/user-service/actuator/metrics'
-    static_configs:
-    - targets: ['user-service']
-  
-  - job_name: "letter-service"
-    scrape_interval: 15s
-    metrics_path: '/letter-service/actuator/prometheus'
-    static_configs:
-    - targets: ['letter-service']
-  
-  - job_name: "apigateway-service"
-    scrape_interval: 15s
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-    - targets: ['apigateway-service']
+  - job_name: "eureka"
+    eureka_sd_configs:
+      - server: http://discovery-service:8761/eureka
+    relabel_configs:
+      - source_labels: [ "__meta_eureka_app_instance_metadata_prometheus_path" ]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [ "__meta_eureka_app_instance_metadata_sys_module" ]
+        action: replace
+        target_label: sys_module
+        regex: (.+)
+      - source_labels: [ "__meta_eureka_app_instance_metadata_prometheus_scrape" ]
+        action: keep
+        regex: (.+)
+
+
+
+#  - job_name: "user-service"
+#    scrape_interval: 15s
+#    metrics_path: '/user-service/actuator/metrics'
+#    static_configs:
+#    - targets: ['user-service']
+#
+#  - job_name: "letter-service"
+#    scrape_interval: 15s
+#    metrics_path: '/letter-service/actuator/prometheus'
+#    static_configs:
+#    - targets: ['letter-service']
+#
+#  - job_name: "apigateway-service"
+#    scrape_interval: 15s
+#    metrics_path: '/actuator/prometheus'
+#    static_configs:
+#    - targets: ['apigateway-service']
 

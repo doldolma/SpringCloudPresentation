@@ -37,6 +37,7 @@ public class KafkaConsumer {
         }
         String userId = map.get("userId").toString();
         UserEntity user = repository.findById(Integer.parseInt(userId));
+        if(user == null) { return; }
 
         Long lettersCount = letterServiceClient.getLettersCount(userId);
         log.info("letter count : " + lettersCount.toString());

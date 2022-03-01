@@ -2,6 +2,7 @@ package com.doldolma.userservice.controller;
 
 import com.doldolma.userservice.jpa.UserEntity;
 import com.doldolma.userservice.service.UserService;
+import io.micrometer.core.annotation.Timed;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
+@Timed
 @RequestMapping("/")
 public class UserController {
 
@@ -28,6 +30,7 @@ public class UserController {
 
     @GetMapping("/welcome")
     public String welcome() {
+        // 설정파일 인삿말 리턴
         return env.getProperty("greeting.message");
     }
 

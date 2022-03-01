@@ -32,6 +32,10 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    metadataMap:
+      "prometheus.scrape": "true"
+      "prometheus.path": "/actuator/prometheus"
+      "sys.module": "letter-service"
 
 logging:
   level:

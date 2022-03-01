@@ -22,6 +22,17 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
+#            - Mehtod=GET
+#            - Cookie=role,123
+#            - Header=X-Request-ID,\d+
+#            - Host=api.grew.com
+#            - Query=userId,\d+
+#            - RemoteAddr=192.168.0.1/24
+#            - Weight=group1, 8
+#            - After= 2022-02-20T17:42:47.789-07:00[Asia/Seoul]
+#            - Before=
+#            - Between=
+
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: letter-service
@@ -43,6 +54,10 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    metadataMap:
+      "prometheus.scrape": "true"
+      "prometheus.path": "/actuator/prometheus"
+      "sys.module": "ApiGateway"
 
 
 management:
