@@ -139,5 +139,5 @@ app.listen(port,  async () => {
   await db.sequelize.sync();
   await Seed()
   console.log(`\t server listening on ${port}`);
-  await kafka();
+  kafka();
 });
