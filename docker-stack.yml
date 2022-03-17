@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.8"
 services:
   mysql:
     image: mysql
@@ -9,8 +9,6 @@ services:
     command: --init-file /data/application/grews.sql
     volumes:
       - ./mysql/grews.sql:/data/application/grews.sql
-    networks:
-      - spring-cloud-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-hlocalhost", "-uroot", "-p123123"]
 #      interval: 10s
@@ -25,12 +23,8 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: 123123
       MARIADB_DATABASE: testdb
-    networks:
-      - spring-cloud-network
-#    restart: always
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-hlocalhost", "-uroot", "-p123123" ]
-#      interval: 10s
       timeout: 5s
       retries: 5
       start_period: 3s
@@ -39,16 +33,11 @@ services:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
-    networks:
-      - spring-cloud-network
-#    restart: always
 
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
-    networks:
-      - spring-cloud-network
 
   kafka:
     image: kafka
@@ -63,8 +52,6 @@ services:
 #      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - spring-cloud-network
 
   kafka_manager:
     image: hlebalbau/kafka-manager:stable
@@ -73,8 +60,6 @@ services:
     environment:
       ZK_HOSTS: "zookeeper:2181"
       APPLICATION_SECRET: "random-secret"
-    networks:
-      - spring-cloud-network
 
   apigateway-service:
     image: apigateway-service
@@ -85,15 +70,10 @@ services:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
       SPRING_CLOUD_CONFIG_URI: http://config-service:8888
-    networks:
-      - spring-cloud-network
     depends_on:
-      discovery-service:
-        condition: service_started
-      user-service:
-        condition: service_started
-      letter-service:
-        condition: service_started
+      - discovery-service
+      - user-service
+      - letter-service
 
   config-service:
     image: config-service
@@ -103,8 +83,6 @@ services:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
       SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/doldolma/SpringCloudConfig.git
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
-    networks:
-      - spring-cloud-network
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/application/default" ]
       interval: 10s
@@ -124,20 +102,17 @@ services:
       SPRING_DATASOURCE_PASSWORD: 123123
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
       SPRING_CLOUD_CONFIG_URI: http://config-service:8888
-    networks:
-      - spring-cloud-network
+    deploy:
+      mode: replicated
+      replicas: 4
     depends_on:
-      mariadb:
-        condition: service_healthy
-      config-service:
-        condition: service_healthy
+      - mariadb
+      - config-service
 
   discovery-service:
     image: discovery-service
     ports:
       - "8761:8761"
-    networks:
-      - spring-cloud-network
 
   user-service:
     image: user-service
@@ -149,13 +124,12 @@ services:
       SPRING_DATASOURCE_PASSWORD: 123123
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://discovery-service:8761/eureka
       SPRING_CLOUD_CONFIG_URI: http://config-service:8888
-    networks:
-      - spring-cloud-network
+    deploy:
+      mode: replicated
+      replicas: 4
     depends_on:
-      mysql:
-        condition: service_healthy
-      config-service:
-        condition: service_healthy
+      - mysql
+      - config-service
 
   prometheus:
     image: prom/prometheus
@@ -163,8 +137,6 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - spring-cloud-network
     depends_on:
       - user-service
 
